@@ -18,12 +18,19 @@ async function run() {
         await client.connect();
         const taskCollection = client.db('taskManager').collection('tasks');
 
-        // Get all Tasks from database
+        // GET method all Tasks from database
         app.get('/tasks', async (req, res) => {
             const query = {};
             const cursor = taskCollection.find(query);
             const tasks = await cursor.toArray();
             res.send(tasks);
+        })
+
+        // POST method to add tasks
+        app.post('/tasks', async (req, res) => {
+            const newTask = req.body;
+            const result = await taskCollection.insertOne(newTask);
+            res.send(result);
         })
 
     }
